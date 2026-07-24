@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoodleVerse - Gourmet Interactive Noodle Recipes & Cooking Hub</title>
+  <meta name="description" content="Discover authentic & fusion noodle recipes from around the world. Features interactive serving scalers, built-in cooking timers, shopping lists, and step-by-step guide.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Animated Gradients -->
+  <div class="bg-blur bg-blur-1"></div>
+  <div class="bg-blur bg-blur-2"></div>
+
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-bowl-food"></i>
+        </div>
+        <span class="brand-text">Noodle<span class="highlight">Verse</span></span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#explore" class="nav-link active"><i class="fa-solid fa-compass"></i> Explore</a>
+        <a href="#favorites" class="nav-link" id="nav-favorites-link"><i class="fa-solid fa-heart"></i> Favorites (<span id="fav-count">0</span>)</a>
+        <button class="nav-btn" id="open-timer-widget-btn"><i class="fa-solid fa-stopwatch"></i> Kitchen Timer</button>
+        <button class="nav-btn list-btn" id="open-shopping-list-btn">
+          <i class="fa-solid fa-basket-shopping"></i> Shopping List
+          <span class="badge" id="cart-count">0</span>
+        </button>
+        <button class="theme-toggle" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </nav>
+
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fa-solid fa-fire"></i> Ultimate Noodle Recipe Collection
+        </div>
+        <h1 class="hero-title">Master the Art of <span class="gradient-text">Noodle Craft</span></h1>
+        <p class="hero-description">
+          Explore authentic Asian street food & fusion noodle dishes. Step-by-step interactive cooking mode, real-time ingredient scaling, and precision kitchen timers.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="hero-search-wrapper">
+          <div class="search-input-group">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="hero-search-input" placeholder="Search noodles (e.g., Tonkotsu Ramen, Pad Thai, Chili Oil, Udon)...">
+            <button class="btn btn-primary" id="hero-search-btn">Search</button>
+          </div>
+        </div>
+
+        <!-- Quick Tags -->
+        <div class="quick-tags">
+          <span class="tag-label">Popular Searches:</span>
+          <button class="quick-tag-btn" data-filter-type="cuisine" data-filter-val="Japanese">🍜 Tonkotsu Ramen</button>
+          <button class="quick-tag-btn" data-filter-type="cuisine" data-filter-val="Thai">🍤 Pad Thai</button>
+          <button class="quick-tag-btn" data-filter-type="cuisine" data-filter-val="Chinese">🌶️ Sichuan Dan Dan</button>
+          <button class="quick-tag-btn" data-filter-type="dietary" data-filter-val="Vegetarian">🥬 Veg Chow Mein</button>
+          <button class="quick-tag-btn" data-filter-type="time" data-filter-val="15">⚡ Under 15 Mins</button>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-image-card">
+          <img src="images/hero_ramen.png" alt="Steaming Tonkotsu Ramen Bowl" id="hero-img">
+          <div class="hero-floating-card top-left">
+            <i class="fa-solid fa-star text-warning"></i>
+            <div>
+              <strong>4.9 / 5.0 Rating</strong>
+              <span>Over 12,000+ home chefs</span>
+            </div>
+          </div>
+          <div class="hero-floating-card bottom-right">
+            <i class="fa-solid fa-clock text-accent"></i>
+            <div>
+              <strong>Precision Timers</strong>
+              <span>Perfect Al Dente Noodles</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recipe Exploration Section -->
+  <section class="explore-section" id="explore">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Explore Noodle Recipes</h2>
+          <p class="section-subtitle">Filter by origin, dietary preferences, spice tolerance, or quick prep time</p>
+        </div>
+        <div class="recipe-count-badge" id="results-count">Showing 7 recipes</div>
+      </div>
+
+      <!-- Filters & Control Bar -->
+      <div class="filter-controls-card">
+        <div class="filter-group">
+          <label><i class="fa-solid fa-globe"></i> Cuisine</label>
+          <select id="filter-cuisine" class="filter-select">
+            <option value="all">All Cuisines</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Thai">Thai</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Vietnamese">Vietnamese</option>
+            <option value="Korean">Korean</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label><i class="fa-solid fa-leaf"></i> Dietary</label>
+          <select id="filter-dietary" class="filter-select">
+            <option value="all">All Diets</option>
+            <option value="Meat">Meat & Poultry</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Gluten-Free">Gluten-Free</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label><i class="fa-solid fa-pepper-hot"></i> Spice Level</label>
+          <select id="filter-spice" class="filter-select">
+            <option value="all">Any Spice Level</option>
+            <option value="0">Mild (No Spice)</option>
+            <option value="1">Medium Spice 🌶️</option>
+            <option value="2">Hot 🌶️🌶️</option>
+            <option value="3">Fiery Hot 🌶️🌶️🌶️</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label><i class="fa-solid fa-stopwatch"></i> Max Prep Time</label>
+          <select id="filter-time" class="filter-select">
+            <option value="all">Any Time</option>
+            <option value="15">≤ 15 Mins</option>
+            <option value="30">≤ 30 Mins</option>
+            <option value="45">≤ 45 Mins</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By</label>
+          <select id="sort-by" class="filter-select">
+            <option value="popular">Most Popular</option>
+            <option value="rating">Highest Rated</option>
+            <option value="time-asc">Cooking Time (Fastest)</option>
+            <option value="name-asc">Name (A-Z)</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary btn-reset-filters" id="reset-filters-btn" title="Reset all filters">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+      </div>
+
+      <!-- Recipes Grid -->
+      <div class="recipes-grid" id="recipes-grid">
+        <!-- Recipe Cards render dynamically here via JS -->
+      </div>
+      
+      <!-- Empty State -->
+      <div class="empty-state hidden" id="empty-state">
+        <i class="fa-solid fa-bowl-rice empty-icon"></i>
+        <h3>No matching recipes found</h3>
+        <p>Try adjusting your search keywords or clearing some filters.</p>
+        <button class="btn btn-primary" id="empty-reset-btn">Reset All Filters</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Cooking Tips & Noodle Guide -->
+  <section class="tips-section">
+    <div class="container">
+      <div class="glass-banner">
+        <div class="tips-header">
+          <i class="fa-solid fa-graduation-cap tips-icon"></i>
+          <div>
+            <h3>Secrets to Restaurant-Quality Noodle Dishes</h3>
+            <p>Pro cooking techniques passed down by noodle artisans</p>
+          </div>
+        </div>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-num">01</div>
+            <h4>Salt the Noodle Water Generously</h4>
+            <p>Always boil noodles in heavily salted water (like sea water) to season the dough from the inside out before combining with broth or sauce.</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">02</div>
+            <h4>Cold Rinse for Stir-Fries</h4>
+            <p>Rinse stir-fry noodles (like Chow Mein or Pad Thai) under cold running water immediately after draining to stop cooking and wash off excess starch.</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">03</div>
+            <h4>Emulsify the Broth & Sauce</h4>
+            <p>Save 1/2 cup of starchy noodle boiling water! Adding a splash to your sauce helps bind fats and liquids into a glossy, velvety coating.</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">04</div>
+            <h4>Aromatic Chili Oil Tempering</h4>
+            <p>Pour sizzling 350°F oil directly over garlic, ginger, and Sichuan pepper flakes to bloom maximum fragrance without burning the aromatics.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <a href="#" class="brand">
+          <div class="brand-icon"><i class="fa-solid fa-bowl-food"></i></div>
+          <span class="brand-text">Noodle<span class="highlight">Verse</span></span>
+        </a>
+        <p>Crafting memorable culinary experiences with delicious noodle recipes from around the globe.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Recipe Categories</h4>
+        <ul>
+          <li><a href="#" class="footer-cat-link" data-cuisine="Japanese">Japanese Ramen & Udon</a></li>
+          <li><a href="#" class="footer-cat-link" data-cuisine="Thai">Thai Pad Thai & Curry Noodles</a></li>
+          <li><a href="#" class="footer-cat-link" data-cuisine="Chinese">Sichuan & Hakka Noodles</a></li>
+          <li><a href="#" class="footer-cat-link" data-cuisine="Vietnamese">Vietnamese Pho & Bun Ba</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Interactive Tools</h4>
+        <ul>
+          <li><a href="#explore" id="footer-timer-link">Kitchen Stopwatch Timer</a></li>
+          <li><a href="#explore" id="footer-cart-link">Grocery Shopping List</a></li>
+          <li><a href="#favorites">Saved Favorite Recipes</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2026 NoodleVerse. Built for noodle lovers everywhere. Bon Appétit! 🍜</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS & DRAWERS ==================== -->
+
+  <!-- Detailed Recipe View Modal -->
+  <div class="modal-overlay hidden" id="recipe-modal">
+    <div class="modal-card recipe-modal-card">
+      <button class="modal-close-btn" id="close-recipe-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="recipe-modal-header">
+        <img src="" alt="Recipe Image" id="modal-recipe-img" class="modal-hero-img">
+        <div class="modal-header-overlay">
+          <div class="modal-badges">
+            <span class="badge badge-cuisine" id="modal-cuisine-badge">Japanese</span>
+            <span class="badge badge-diet" id="modal-diet-badge">Vegetarian</span>
+            <span class="badge badge-spice" id="modal-spice-badge">🌶️ Medium</span>
+          </div>
+          <h2 id="modal-recipe-title" class="modal-title">Tonkotsu Ramen</h2>
+          <p id="modal-recipe-desc" class="modal-subtitle">Rich creamy pork broth with tender noodles and seasoned soft boiled egg.</p>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Recipe Quick Stats Bar -->
+        <div class="recipe-stats-bar">
+          <div class="stat-item">
+            <i class="fa-solid fa-clock"></i>
+            <div>
+              <span class="stat-label">Total Time</span>
+              <strong id="modal-total-time">35 mins</strong>
+            </div>
+          </div>
+          <div class="stat-item">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+            <div>
+              <span class="stat-label">Calories</span>
+              <strong id="modal-calories">580 kcal</strong>
+            </div>
+          </div>
+          <div class="stat-item">
+            <i class="fa-solid fa-gauge-high"></i>
+            <div>
+              <span class="stat-label">Difficulty</span>
+              <strong id="modal-difficulty">Medium</strong>
+            </div>
+          </div>
+          <div class="stat-item">
+            <i class="fa-solid fa-star text-warning"></i>
+            <div>
+              <span class="stat-label">Rating</span>
+              <strong id="modal-rating">4.9 (1,240)</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Servings & Unit Toggle Toolbar -->
+        <div class="calculator-toolbar">
+          <div class="servings-selector">
+            <span><i class="fa-solid fa-users"></i> Servings:</span>
+            <div class="quantity-counter">
+              <button class="counter-btn" id="servings-minus"><i class="fa-solid fa-minus"></i></button>
+              <span class="counter-value" id="servings-count">2</span>
+              <button class="counter-btn" id="servings-plus"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <span class="servings-note">(Quantities recalculate automatically)</span>
+          </div>
+
+          <div class="unit-toggle">
+            <button class="unit-btn active" id="unit-metric-btn">Metric</button>
+            <button class="unit-btn" id="unit-imperial-btn">Imperial</button>
+          </div>
+        </div>
+
+        <!-- Recipe Columns Layout -->
+        <div class="recipe-content-grid">
+          
+          <!-- Ingredients Column -->
+          <div class="ingredients-column">
+            <div class="column-header">
+              <h3><i class="fa-solid fa-list-check"></i> Ingredients</h3>
+              <button class="btn btn-sm btn-secondary" id="add-all-cart-btn">
+                <i class="fa-solid fa-cart-plus"></i> Add All to List
+              </button>
+            </div>
+
+            <ul class="ingredients-list" id="modal-ingredients-list">
+              <!-- Dynamically populated -->
+            </ul>
+
+            <!-- Nutrition Facts Card -->
+            <div class="nutrition-box">
+              <h4><i class="fa-solid fa-chart-pie"></i> Nutrition Per Serving</h4>
+              <div class="nutrition-grid" id="modal-nutrition-grid">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Instructions Column -->
+          <div class="instructions-column">
+            <div class="column-header">
+              <h3><i class="fa-solid fa-utensils"></i> Step-by-Step Instructions</h3>
+              <button class="btn btn-sm btn-primary" id="start-focus-mode-btn">
+                <i class="fa-solid fa-play"></i> Start Cooking Mode
+              </button>
+            </div>
+
+            <ol class="instructions-list" id="modal-instructions-list">
+              <!-- Dynamically populated -->
+            </ol>
+
+            <!-- Chef's Pro Tip -->
+            <div class="chef-tip-box" id="modal-chef-tip-container">
+              <div class="tip-icon-wrap"><i class="fa-solid fa-lightbulb"></i></div>
+              <div>
+                <strong>Chef's Pro Tip:</strong>
+                <p id="modal-chef-tip">Don't overcook noodles! Drain them 30 seconds before target time as they will continue softening in hot broth.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modal-fav-toggle-btn">
+          <i class="fa-regular fa-heart"></i> Save to Favorites
+        </button>
+        <button class="btn btn-primary" id="modal-start-cooking-footer">
+          <i class="fa-solid fa-fire"></i> Interactive Focus Mode
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Step-by-Step Cooking Focus Mode Modal -->
+  <div class="modal-overlay hidden" id="focus-modal">
+    <div class="modal-card focus-modal-card">
+      <div class="focus-header">
+        <div class="focus-title-wrap">
+          <span class="badge" id="focus-recipe-name">Tonkotsu Ramen</span>
+          <h3>Step <span id="focus-step-num">1</span> of <span id="focus-total-steps">5</span></h3>
+        </div>
+        <button class="modal-close-btn" id="close-focus-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Step Progress Bar -->
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="focus-progress-fill" style="width: 20%;"></div>
+      </div>
+
+      <div class="focus-body">
+        <div class="focus-step-card">
+          <div class="step-badge-large" id="focus-step-badge">STEP 1</div>
+          <h2 class="focus-step-title" id="focus-step-title">Prepare Broth Base</h2>
+          <p class="focus-step-text" id="focus-step-desc">
+            In a deep pot, combine chicken stock, dashi, soy sauce, and grated ginger. Bring to a gentle simmer over medium heat for 10 minutes.
+          </p>
+
+          <!-- Step Embedded Timer Widget if step has timer -->
+          <div class="step-timer-box hidden" id="focus-step-timer-box">
+            <div class="timer-display-ring">
+              <span id="focus-timer-clock">04:00</span>
+              <small id="focus-timer-label">Noodle Boil Countdown</small>
+            </div>
+            <div class="step-timer-controls">
+              <button class="btn btn-primary btn-sm" id="focus-timer-start-btn"><i class="fa-solid fa-play"></i> Start Timer</button>
+              <button class="btn btn-secondary btn-sm" id="focus-timer-reset-btn"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="focus-footer">
+        <button class="btn btn-secondary" id="focus-prev-btn"><i class="fa-solid fa-arrow-left"></i> Previous Step</button>
+        <div class="step-dots" id="focus-step-dots"></div>
+        <button class="btn btn-primary" id="focus-next-btn">Next Step <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kitchen Stopwatch & Preset Timer Modal / Floating Widget -->
+  <div class="modal-overlay hidden" id="timer-modal">
+    <div class="modal-card timer-modal-card">
+      <button class="modal-close-btn" id="close-timer-modal"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-stopwatch text-accent"></i> Kitchen Noodle Timer</h2>
+        <p>Precision timing for soft boiled eggs, fresh ramen, dried udon & stir-fries.</p>
+      </div>
+
+      <div class="timer-main-display">
+        <div class="timer-ring-container">
+          <div class="timer-ring-text" id="widget-timer-display">04:00</div>
+          <div class="timer-preset-tag" id="widget-timer-tag">Preset: Ramen Noodles</div>
+        </div>
+
+        <div class="timer-action-btns">
+          <button class="btn btn-primary btn-lg" id="widget-timer-toggle-btn"><i class="fa-solid fa-play"></i> Start</button>
+          <button class="btn btn-secondary btn-lg" id="widget-timer-reset-btn"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        </div>
+      </div>
+
+      <div class="timer-presets-section">
+        <h4>Popular Noodle Presets</h4>
+        <div class="presets-grid">
+          <button class="preset-btn active" data-time="240" data-label="Fresh Ramen Noodles (4m)">
+            <i class="fa-solid fa-bowl-food"></i>
+            <span>Fresh Ramen</span>
+            <small>4:00</small>
+          </button>
+          <button class="preset-btn" data-time="390" data-label="Soft Boiled Ajitsuke Egg (6.5m)">
+            <i class="fa-solid fa-egg"></i>
+            <span>Soft-Boiled Egg</span>
+            <small>6:30</small>
+          </button>
+          <button class="preset-btn" data-time="480" data-label="Thick Udon Noodles (8m)">
+            <i class="fa-solid fa-utensils"></i>
+            <span>Dried Udon</span>
+            <small>8:00</small>
+          </button>
+          <button class="preset-btn" data-time="180" data-label="Thin Rice Noodles / Pho (3m)">
+            <i class="fa-solid fa-seedling"></i>
+            <span>Rice Noodles</span>
+            <small>3:00</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="custom-timer-section">
+        <h4>Custom Countdown</h4>
+        <div class="custom-inputs-row">
+          <div class="input-unit">
+            <input type="number" id="custom-min-input" min="0" max="60" value="5">
+            <span>Mins</span>
+          </div>
+          <span class="colon">:</span>
+          <div class="input-unit">
+            <input type="number" id="custom-sec-input" min="0" max="59" value="0">
+            <span>Secs</span>
+          </div>
+          <button class="btn btn-secondary" id="set-custom-timer-btn">Set Timer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping List Drawer -->
+  <div class="drawer-overlay hidden" id="shopping-drawer-overlay">
+    <div class="shopping-drawer">
+      <div class="drawer-header">
+        <h3><i class="fa-solid fa-basket-shopping text-accent"></i> Grocery List (<span id="drawer-item-count">0</span>)</h3>
+        <button class="modal-close-btn" id="close-shopping-drawer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="drawer-body">
+        <!-- Quick Add Manual Item -->
+        <div class="add-manual-item-row">
+          <input type="text" id="manual-item-input" placeholder="Add custom item (e.g., Sesame Oil)...">
+          <button class="btn btn-primary" id="add-manual-item-btn"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+        <ul class="shopping-items-list" id="shopping-items-list">
+          <!-- Dynamically Populated -->
+        </ul>
+
+        <div class="empty-drawer-state hidden" id="empty-drawer">
+          <i class="fa-solid fa-cart-flatbed"></i>
+          <p>Your shopping list is empty!</p>
+          <small>Add ingredients directly from any recipe card or modal.</small>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button class="btn btn-secondary btn-sm" id="clear-completed-cart-btn"><i class="fa-solid fa-check-double"></i> Clear Checked</button>
+        <button class="btn btn-danger btn-sm" id="clear-all-cart-btn"><i class="fa-solid fa-trash-can"></i> Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
